@@ -63,12 +63,16 @@ function typeName(obj: object): string {
   }
 }
 
+function showValue(value: any): string {
+  return value === undefined ? "undefined" : JSON.stringify(value);
+}
+
 function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
   return (
     <TreeNode>
       {name ? <PropertyName>{name}</PropertyName> : null}
       {name ? <GraySpan>{": "}</GraySpan> : null}
-      <Value>{JSON.stringify(value)}</Value>
+      <Value>{showValue(value)}</Value>
     </TreeNode>
   );
 }
