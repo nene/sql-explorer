@@ -39,6 +39,20 @@ const GrayDiv = styled.div`
   color: #93a1a1;
 `;
 
+function toCamelCase(str: string): string {
+  return str
+    .replace(/_(.)/g, (s, s1) => s1.toUpperCase())
+    .replace(/^(.)/, (s, s1) => s1.toUpperCase());
+}
+
+function typeName(obj: object): string {
+  if ("type" in obj) {
+    return toCamelCase(obj.type as string);
+  } else {
+    return "";
+  }
+}
+
 function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
   return (
     <TreeNode>
@@ -52,8 +66,14 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
 function ObjectPropertyNode({ name, value }: { name?: string; value: object }) {
   return (
     <TreeNode expandable expanded>
-      {name ? <PropertyName>{name}</PropertyName> : null}
-      {name ? <GraySpan>{": {"}</GraySpan> : <GraySpan>{"{"}</GraySpan>}
+      {name ? (
+        <>
+          <PropertyName>{name}</PropertyName>
+          <GraySpan>{": "}</GraySpan>
+        </>
+      ) : null}
+      <NodeName>{typeName(value)}</NodeName>
+      <GraySpan>{" {"}</GraySpan>
       <PropertyList value={value} />
       <GrayDiv>{"}"}</GrayDiv>
     </TreeNode>
