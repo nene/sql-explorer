@@ -27,6 +27,7 @@ const Content = styled.div`
 
 const TreeArea = styled.div`
   flex: 1;
+  overflow-y: scroll;
 `;
 
 export function App() {
