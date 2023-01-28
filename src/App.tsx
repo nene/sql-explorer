@@ -37,7 +37,7 @@ export function App() {
 
   useEffect(() => {
     try {
-      setCst(parse(sql, { dialect: "sqlite" }));
+      setCst(parse(sql, { dialect: "sqlite", includeRange: true }));
       setError("");
     } catch (e) {
       setError((e as any).message);
