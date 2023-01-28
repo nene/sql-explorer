@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import CodeMirror from "@uiw/react-codemirror";
+import { sql } from "@codemirror/lang-sql";
 
-const TextArea = styled.textarea`
+const EditorBorder = styled.div`
   border: 2px solid #ddd;
-  padding: 5px;
 `;
 
 export function TextEditor({
@@ -13,11 +14,13 @@ export function TextEditor({
   onChange: (s: string) => void;
 }) {
   return (
-    <TextArea
-      rows={12}
-      cols={80}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <EditorBorder>
+      <CodeMirror
+        value={value}
+        height="200px"
+        extensions={[sql()]}
+        onChange={onChange}
+      />
+    </EditorBorder>
   );
 }
