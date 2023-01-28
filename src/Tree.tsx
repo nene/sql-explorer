@@ -39,32 +39,71 @@ const GrayDiv = styled.div`
   color: #93a1a1;
 `;
 
-export function Tree() {
+function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
+  return (
+    <TreeNode>
+      {name ? <PropertyName>{name}</PropertyName> : null}
+      {name ? <GraySpan>{": "}</GraySpan> : null}
+      <Value>{JSON.stringify(value)}</Value>
+    </TreeNode>
+  );
+}
+
+function ObjectPropertyNode({ name, value }: { name?: string; value: object }) {
+  return (
+    <TreeNode expandable expanded>
+      {name ? <PropertyName>{name}</PropertyName> : null}
+      {name ? <GraySpan>{": {"}</GraySpan> : <GraySpan>{"{"}</GraySpan>}
+      <PropertyList value={value} />
+      <GrayDiv>{"}"}</GrayDiv>
+    </TreeNode>
+  );
+}
+
+function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
+  return (
+    <TreeNode expandable expanded>
+      {name ? <PropertyName>{name}</PropertyName> : null}
+      {name ? <GraySpan>{": ["}</GraySpan> : <GraySpan>{"["}</GraySpan>}
+      <ArrayElementList value={value} />
+      <GrayDiv>{"]"}</GrayDiv>
+    </TreeNode>
+  );
+}
+
+function PropertyNode(props: { name?: string; value: any }) {
+  if (props.value instanceof Array) {
+    return <ArrayPropertyNode {...props} />;
+  } else if (typeof props.value === "object" && props.value !== null) {
+    return <ObjectPropertyNode {...props} />;
+  } else {
+    return <PlainPropertyNode {...props} />;
+  }
+}
+
+function PropertyList({ value }: { value: object }) {
   return (
     <NodeList>
-      <TreeNode expandable expanded>
-        <NodeName>Root</NodeName>
-        <GraySpan>{": "}</GraySpan>
-        <GraySpan>{" {"}</GraySpan>
-        <NodeList>
-          <TreeNode>
-            <PropertyName>sourceType</PropertyName>
-            <GraySpan>{": "}</GraySpan>
-            <Value>"module"</Value>
-          </TreeNode>
-          <TreeNode>
-            <PropertyName>interpreter</PropertyName>
-            <GraySpan>{": "}</GraySpan>
-            <Value>null</Value>
-          </TreeNode>
-          <TreeNode expandable>
-            <PropertyName>items</PropertyName>
-            <GraySpan>{": "}</GraySpan>
-            <GraySpan>{" [ ]"}</GraySpan>
-          </TreeNode>
-        </NodeList>
-        <GrayDiv>{"}"}</GrayDiv>
-      </TreeNode>
+      {Object.entries(value).map(([name, value]) => (
+        <PropertyNode name={name} value={value} key={name} />
+      ))}
     </NodeList>
   );
+}
+
+function ArrayElementList({ value }: { value: any[] }) {
+  if (value.length === 0) {
+    return null;
+  }
+  return (
+    <NodeList>
+      {value.map((v, i) => (
+        <PropertyNode value={v} key={i} />
+      ))}
+    </NodeList>
+  );
+}
+
+export function Tree({ data }: { data: object }) {
+  return <ObjectPropertyNode value={data} />;
 }

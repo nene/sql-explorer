@@ -17,13 +17,21 @@ const TitleBar = styled.div`
   border-bottom: 1px solid #dddddd;
 `;
 
+const cst = {
+  type: "select_stmt",
+  clauses: [
+    { type: "select_clause", columns: [{ type: "all_columns" }] },
+    { type: "from_clause", expr: { type: "identifier", name: "my_table" } },
+  ],
+};
+
 export function App() {
   return (
     <div>
       <TitleBar>
         <Title>SQL Explorer</Title>
       </TitleBar>
-      <Tree></Tree>
+      <Tree data={cst}></Tree>
     </div>
   );
 }
