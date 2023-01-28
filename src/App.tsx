@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
 const Title = styled.h1`
@@ -17,6 +18,16 @@ const TitleBar = styled.div`
   border-bottom: 1px solid #dddddd;
 `;
 
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
+const TreeArea = styled.div`
+  flex: 1;
+`;
+
 const cst = {
   type: "select_stmt",
   clauses: [
@@ -26,12 +37,16 @@ const cst = {
 };
 
 export function App() {
+  const [sql, setSql] = useState("SELECT * FROM my_tbl");
   return (
-    <div>
+    <Content>
       <TitleBar>
         <Title>SQL Explorer</Title>
       </TitleBar>
-      <Tree data={cst}></Tree>
-    </div>
+      <TreeArea>
+        <Tree data={cst} />
+      </TreeArea>
+      <TextEditor value={sql} onChange={setSql} />
+    </Content>
   );
 }
