@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
+import { CursorContext } from "./state";
 
 const NodeList = styled.ul`
   font-size: 14px;
@@ -81,6 +83,18 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
   );
 }
 
+const isObject = (value: any): value is Object =>
+  typeof value === "object" && !Array.isArray(value) && value !== null;
+
+const isCursorInside = (cursor: number, node: object) => {
+  if (!("range" in node)) {
+    console.log(node);
+    return false;
+  }
+  const range: [number, number] = (node as any).range;
+  return range[0] <= cursor && cursor <= range[1];
+};
+
 function ObjectPropertyNode({
   name,
   value,
@@ -91,6 +105,13 @@ function ObjectPropertyNode({
   expanded?: boolean;
 }) {
   const [expanded, setExpanded] = useState(startExpanded || false);
+  const cursor = useContext(CursorContext);
+  useEffect(() => {
+    if (isCursorInside(cursor, value)) {
+      setExpanded(true);
+    }
+  }, [cursor, value, setExpanded]);
+
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (
@@ -119,6 +140,13 @@ function ObjectPropertyNode({
 
 function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
   const [expanded, setExpanded] = useState(false);
+  const cursor = useContext(CursorContext);
+  useEffect(() => {
+    if (value.some((x) => isObject(x) && isCursorInside(cursor, x))) {
+      setExpanded(true);
+    }
+  }, [cursor, value, setExpanded]);
+
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
+import { CursorContext } from "./state";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
@@ -30,10 +31,14 @@ const TreeArea = styled.div`
   overflow-y: scroll;
 `;
 
+const parseSql = (sql: string) =>
+  parse(sql, { dialect: "sqlite", includeRange: true });
+
 export function App() {
-  const [sql, setSql] = useState("SELECT * FROM my_tbl");
-  const [cst, setCst] = useState({});
+  const [sql, setSql] = useState(" SELECT * FROM my_tbl");
+  const [cst, setCst] = useState(parseSql(sql));
   const [error, setError] = useState("");
+  const [cursor, setCursor] = useState(0);
 
   useEffect(() => {
     try {
@@ -45,16 +50,18 @@ export function App() {
   }, [sql, setCst, setError]);
 
   return (
-    <Content>
-      <TitleBar>
-        <Title>SQL Explorer</Title>
-      </TitleBar>
-      <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
-      <TextEditor
-        value={sql}
-        onChange={setSql}
-        onCursorPositionChange={(i) => console.log(i)}
-      />
-    </Content>
+    <CursorContext.Provider value={cursor}>
+      <Content>
+        <TitleBar>
+          <Title>SQL Explorer</Title>
+        </TitleBar>
+        <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
+        <TextEditor
+          value={sql}
+          onChange={setSql}
+          onCursorPositionChange={setCursor}
+        />
+      </Content>
+    </CursorContext.Provider>
   );
 }
