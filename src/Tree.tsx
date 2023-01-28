@@ -8,14 +8,15 @@ const NodeList = styled.ul`
   padding-left: 20px;
 `;
 
-const TreeNode = styled.li`
+const TreeNode = styled.li<{ expanded?: boolean; expandable?: boolean }>`
   margin: 0;
   list-style: none;
   padding: 5px;
   position: relative;
   &::before {
-    content: "-";
-    color: red;
+    content: ${(props) => (props.expanded ? '"-"' : '"+"')};
+    color: ${(props) => (props.expanded ? "red" : "green")};
+    display: ${(props) => (props.expandable ? "inline" : "none")};
     position: absolute;
     left: -10px;
   }
@@ -41,7 +42,7 @@ const GrayDiv = styled.div`
 export function Tree() {
   return (
     <NodeList>
-      <TreeNode>
+      <TreeNode expandable expanded>
         <NodeName>Root</NodeName>
         <GraySpan>{": "}</GraySpan>
         <GraySpan>{" {"}</GraySpan>
@@ -56,7 +57,7 @@ export function Tree() {
             <GraySpan>{": "}</GraySpan>
             <Value>null</Value>
           </TreeNode>
-          <TreeNode>
+          <TreeNode expandable>
             <PropertyName>items</PropertyName>
             <GraySpan>{": "}</GraySpan>
             <GraySpan>{" [ ]"}</GraySpan>
