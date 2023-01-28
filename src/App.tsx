@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { parse } from "sql-parser-cst";
 import styled from "styled-components";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
@@ -28,24 +29,26 @@ const TreeArea = styled.div`
   flex: 1;
 `;
 
-const cst = {
-  type: "select_stmt",
-  clauses: [
-    { type: "select_clause", columns: [{ type: "all_columns" }] },
-    { type: "from_clause", expr: { type: "identifier", name: "my_table" } },
-  ],
-};
-
 export function App() {
   const [sql, setSql] = useState("SELECT * FROM my_tbl");
+  const [cst, setCst] = useState({});
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    try {
+      setCst(parse(sql, { dialect: "sqlite" }));
+      setError("");
+    } catch (e) {
+      setError((e as any).message);
+    }
+  }, [sql, setCst, setError]);
+
   return (
     <Content>
       <TitleBar>
         <Title>SQL Explorer</Title>
       </TitleBar>
-      <TreeArea>
-        <Tree data={cst} />
-      </TreeArea>
+      <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
       <TextEditor value={sql} onChange={setSql} />
     </Content>
   );
