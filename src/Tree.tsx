@@ -67,6 +67,10 @@ function showValue(value: any): string {
   return value === undefined ? "undefined" : JSON.stringify(value);
 }
 
+function isPropertyVisible(name: string, value: any): boolean {
+  return value !== undefined;
+}
+
 function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
   return (
     <TreeNode>
@@ -148,9 +152,11 @@ function PropertyNode(props: { name?: string; value: any }) {
 function PropertyList({ value }: { value: object }) {
   return (
     <NodeList>
-      {Object.entries(value).map(([name, value]) => (
-        <PropertyNode name={name} value={value} key={name} />
-      ))}
+      {Object.entries(value)
+        .filter(([k, v]) => isPropertyVisible(k, v))
+        .map(([name, value]) => (
+          <PropertyNode name={name} value={value} key={name} />
+        ))}
     </NodeList>
   );
 }
