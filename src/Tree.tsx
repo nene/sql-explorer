@@ -73,8 +73,16 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
   );
 }
 
-function ObjectPropertyNode({ name, value }: { name?: string; value: object }) {
-  const [expanded, setExpanded] = useState(true);
+function ObjectPropertyNode({
+  name,
+  value,
+  expanded: startExpanded,
+}: {
+  name?: string;
+  value: object;
+  expanded?: boolean;
+}) {
+  const [expanded, setExpanded] = useState(startExpanded || false);
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (
@@ -102,7 +110,7 @@ function ObjectPropertyNode({ name, value }: { name?: string; value: object }) {
 }
 
 function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (
@@ -157,5 +165,5 @@ function ArrayElementList({ value }: { value: any[] }) {
 }
 
 export function Tree({ data }: { data: object }) {
-  return <ObjectPropertyNode value={data} />;
+  return <ObjectPropertyNode value={data} expanded={true} />;
 }
