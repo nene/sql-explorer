@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Tree } from "./Tree";
 
 const Title = styled.h1`
   font-size: 18px;
@@ -18,8 +19,11 @@ const TitleBar = styled.div`
 
 export function App() {
   return (
-    <TitleBar>
-      <Title>SQL Explorer</Title>
-    </TitleBar>
+    <div>
+      <TitleBar>
+        <Title>SQL Explorer</Title>
+      </TitleBar>
+      <Tree></Tree>
+    </div>
   );
 }
