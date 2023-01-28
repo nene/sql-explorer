@@ -6,6 +6,8 @@ const EditorBorder = styled.div`
   border: 2px solid #ddd;
 `;
 
+const extensions = [sql()];
+
 export function TextEditor({
   value,
   onChange,
@@ -18,7 +20,7 @@ export function TextEditor({
       <CodeMirror
         value={value}
         height="200px"
-        extensions={[sql()]}
+        extensions={extensions}
         onChange={onChange}
       />
     </EditorBorder>
