@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const NodeList = styled.ul`
@@ -22,11 +22,21 @@ const TreeNode = styled.li<{ expanded?: boolean; expandable?: boolean }>`
   }
 `;
 
-const NodeName = styled.span`
+const NodeType = styled.span`
   color: #268bd2;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 const PropertyName = styled.span`
   color: #b58900;
+`;
+const ExpandablePropertyName = styled(PropertyName)`
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 const Value = styled.span`
   color: #2aa198;
@@ -64,29 +74,51 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
 }
 
 function ObjectPropertyNode({ name, value }: { name?: string; value: object }) {
+  const [expanded, setExpanded] = useState(true);
   return (
-    <TreeNode expandable expanded>
+    <TreeNode expandable expanded={expanded}>
       {name ? (
         <>
-          <PropertyName>{name}</PropertyName>
+          <ExpandablePropertyName onClick={() => setExpanded(!expanded)}>
+            {name}
+          </ExpandablePropertyName>
           <GraySpan>{": "}</GraySpan>
         </>
       ) : null}
-      <NodeName>{typeName(value)}</NodeName>
+      <NodeType onClick={() => setExpanded(!expanded)}>
+        {typeName(value)}
+      </NodeType>
       <GraySpan>{" {"}</GraySpan>
-      <PropertyList value={value} />
-      <GrayDiv>{"}"}</GrayDiv>
+      {expanded ? (
+        <>
+          <PropertyList value={value} />
+          <GrayDiv>{"}"}</GrayDiv>
+        </>
+      ) : (
+        <GraySpan>{" }"}</GraySpan>
+      )}
     </TreeNode>
   );
 }
 
 function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
+  const [expanded, setExpanded] = useState(true);
   return (
-    <TreeNode expandable expanded>
-      {name ? <PropertyName>{name}</PropertyName> : null}
+    <TreeNode expandable expanded={expanded}>
+      {name ? (
+        <ExpandablePropertyName onClick={() => setExpanded(!expanded)}>
+          {name}
+        </ExpandablePropertyName>
+      ) : null}
       {name ? <GraySpan>{": ["}</GraySpan> : <GraySpan>{"["}</GraySpan>}
-      <ArrayElementList value={value} />
-      <GrayDiv>{"]"}</GrayDiv>
+      {expanded ? (
+        <>
+          <ArrayElementList value={value} />
+          <GrayDiv>{"]"}</GrayDiv>
+        </>
+      ) : (
+        <GraySpan>{" ]"}</GraySpan>
+      )}
     </TreeNode>
   );
 }
