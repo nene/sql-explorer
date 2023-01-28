@@ -50,7 +50,11 @@ export function App() {
         <Title>SQL Explorer</Title>
       </TitleBar>
       <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
-      <TextEditor value={sql} onChange={setSql} />
+      <TextEditor
+        value={sql}
+        onChange={setSql}
+        onCursorPositionChange={(i) => console.log(i)}
+      />
     </Content>
   );
 }

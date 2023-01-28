@@ -11,9 +11,11 @@ const extensions = [sql()];
 export function TextEditor({
   value,
   onChange,
+  onCursorPositionChange,
 }: {
   value: string;
   onChange: (s: string) => void;
+  onCursorPositionChange: (index: number) => void;
 }) {
   return (
     <EditorBorder>
@@ -22,6 +24,10 @@ export function TextEditor({
         height="200px"
         extensions={extensions}
         onChange={onChange}
+        onUpdate={(update) => {
+          const range = update.state.selection.ranges[0];
+          onCursorPositionChange(range.from);
+        }}
       />
     </EditorBorder>
   );
