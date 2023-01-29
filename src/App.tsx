@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
-import { setCursor } from "./cursorSlice";
-import { RootState } from "./store";
+import { selectCursor, setCursor } from "./cursorSlice";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
@@ -42,7 +41,7 @@ export function App() {
   const [sql, setSql] = useState(" SELECT * FROM my_tbl");
   const [cst, setCst] = useState(emptyProgram);
   const [error, setError] = useState("");
-  const cursor = useSelector((state: RootState) => state.cursor);
+  const cursor = useSelector(selectCursor);
   const dispatch = useDispatch();
 
   useEffect(() => {
