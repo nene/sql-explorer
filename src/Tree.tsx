@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { selectCursor } from "./cursorSlice";
+import { selectCursor } from "./state/cursorSlice";
 
 const NodeList = styled.ul`
   font-size: 14px;

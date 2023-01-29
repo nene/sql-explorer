@@ -3,7 +3,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { setCursor } from "./cursorSlice";
+import { setCursor } from "./state/cursorSlice";
 
 const EditorBorder = styled.div`
   border: 2px solid #ddd;
