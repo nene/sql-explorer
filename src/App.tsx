@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
+import { increment } from "./counterSlice";
 import { CursorContext } from "./state";
+import { RootState } from "./store";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
@@ -41,6 +44,8 @@ export function App() {
   const [cst, setCst] = useState(emptyProgram);
   const [error, setError] = useState("");
   const [cursor, setCursor] = useState(0);
+  const count = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
@@ -51,17 +56,23 @@ export function App() {
     }
   }, [sql, setCst, setError]);
 
+  const onCursorPositionChange = useCallback(
+    () => dispatch(increment()),
+    [dispatch]
+  );
+
   return (
     <CursorContext.Provider value={cursor}>
       <Content>
         <TitleBar>
           <Title>SQL Explorer</Title>
+          <span>{count}</span>
         </TitleBar>
         <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
         <TextEditor
           value={sql}
           onChange={setSql}
-          onCursorPositionChange={setCursor}
+          onCursorPositionChange={onCursorPositionChange}
         />
       </Content>
     </CursorContext.Provider>
