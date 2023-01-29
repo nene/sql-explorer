@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@codemirror/lang-sql": "^6.4.0",
+    "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -14,6 +15,7 @@
     "@uiw/react-codemirror": "^4.19.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
     "sql-parser-cst": "^0.11.0",
     "styled-components": "^5.3.6",
