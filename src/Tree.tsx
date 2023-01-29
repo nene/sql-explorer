@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { CursorContext } from "./state";
+import { RootState } from "./store";
 
 const NodeList = styled.ul`
   font-size: 14px;
@@ -105,7 +106,7 @@ function ObjectPropertyNode({
   expanded?: boolean;
 }) {
   const [expanded, setExpanded] = useState(startExpanded || false);
-  const cursor = useContext(CursorContext);
+  const cursor = useSelector((state: RootState) => state.cursor);
   useEffect(() => {
     if (isCursorInside(cursor, value)) {
       setExpanded(true);
@@ -140,7 +141,7 @@ function ObjectPropertyNode({
 
 function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
   const [expanded, setExpanded] = useState(false);
-  const cursor = useContext(CursorContext);
+  const cursor = useSelector((state: RootState) => state.cursor);
   useEffect(() => {
     if (value.some((x) => isObject(x) && isCursorInside(cursor, x))) {
       setExpanded(true);
