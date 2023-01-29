@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
-import { selectCursor } from "./cursorSlice";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
@@ -41,7 +39,6 @@ export function App() {
   const [sql, setSql] = useState(" SELECT * FROM my_tbl");
   const [cst, setCst] = useState(emptyProgram);
   const [error, setError] = useState("");
-  const cursor = useSelector(selectCursor);
 
   useEffect(() => {
     try {
@@ -56,7 +53,6 @@ export function App() {
     <Content>
       <TitleBar>
         <Title>SQL Explorer</Title>
-        <span>{cursor}</span>
       </TitleBar>
       <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
       <TextEditor value={sql} onChange={setSql} />
