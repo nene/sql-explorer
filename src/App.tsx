@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
-import { selectCursor, setCursor } from "./cursorSlice";
+import { selectCursor } from "./cursorSlice";
 import { TextEditor } from "./TextEditor";
 import { Tree } from "./Tree";
 
@@ -42,7 +42,6 @@ export function App() {
   const [cst, setCst] = useState(emptyProgram);
   const [error, setError] = useState("");
   const cursor = useSelector(selectCursor);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
@@ -53,11 +52,6 @@ export function App() {
     }
   }, [sql, setCst, setError]);
 
-  const onCursorPositionChange = useCallback(
-    (i: number) => dispatch(setCursor(i)),
-    [dispatch]
-  );
-
   return (
     <Content>
       <TitleBar>
@@ -65,11 +59,7 @@ export function App() {
         <span>{cursor}</span>
       </TitleBar>
       <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
-      <TextEditor
-        value={sql}
-        onChange={setSql}
-        onCursorPositionChange={onCursorPositionChange}
-      />
+      <TextEditor value={sql} onChange={setSql} />
     </Content>
   );
 }

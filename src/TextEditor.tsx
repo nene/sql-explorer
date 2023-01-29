@@ -2,6 +2,8 @@ import styled from "styled-components";
 import CodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { setCursor } from "./cursorSlice";
 
 const EditorBorder = styled.div`
   border: 2px solid #ddd;
@@ -12,18 +14,18 @@ const extensions = [sql()];
 export function TextEditor({
   value,
   onChange,
-  onCursorPositionChange,
 }: {
   value: string;
   onChange: (s: string) => void;
-  onCursorPositionChange: (index: number) => void;
 }) {
+  const dispatch = useDispatch();
+
   const onUpdate = useCallback(
     (update: any) => {
       const range = update.state.selection.ranges[0];
-      onCursorPositionChange(range.from);
+      dispatch(setCursor(range.from));
     },
-    [onCursorPositionChange]
+    [dispatch]
   );
 
   return (
