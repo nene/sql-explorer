@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { parse } from "sql-parser-cst";
 import styled from "styled-components";
 import { CursorContext } from "./state";
