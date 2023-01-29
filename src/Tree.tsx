@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { highlightRange } from "./state/highlightSlice";
 import { selectCursor } from "./state/cursorSlice";
 
 const NodeList = styled.ul`
@@ -106,6 +107,8 @@ function ObjectPropertyNode({
 }) {
   const [expanded, setExpanded] = useState(startExpanded || false);
   const cursor = useSelector(selectCursor);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (isCursorInside(cursor, value)) {
       setExpanded(true);
@@ -122,7 +125,10 @@ function ObjectPropertyNode({
           <GraySpan>{": "}</GraySpan>
         </>
       ) : null}
-      <NodeType onClick={() => setExpanded(!expanded)}>
+      <NodeType
+        onClick={() => setExpanded(!expanded)}
+        onMouseOver={() => dispatch(highlightRange((value as any).range))}
+      >
         {typeName(value)}
       </NodeType>
       <GraySpan>{" {"}</GraySpan>
