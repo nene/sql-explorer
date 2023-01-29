@@ -34,15 +34,17 @@ const TreeArea = styled.div`
 const parseSql = (sql: string) =>
   parse(sql, { dialect: "sqlite", includeRange: true });
 
+const emptyProgram = parseSql("");
+
 export function App() {
   const [sql, setSql] = useState(" SELECT * FROM my_tbl");
-  const [cst, setCst] = useState(parseSql(sql));
+  const [cst, setCst] = useState(emptyProgram);
   const [error, setError] = useState("");
   const [cursor, setCursor] = useState(0);
 
   useEffect(() => {
     try {
-      setCst(parse(sql, { dialect: "sqlite", includeRange: true }));
+      setCst(parseSql(sql));
       setError("");
     } catch (e) {
       setError((e as any).message);
