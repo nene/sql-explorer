@@ -5,15 +5,26 @@ import { TextEditor } from "./TextEditor";
 import { Toolbar } from "./Toolbar";
 import { Tree } from "./tree/Tree";
 
-const Content = styled.div`
+const AppWrap = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
 `;
 
+const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const TreeArea = styled.div`
   flex: 1;
   overflow-y: scroll;
+  height: calc(100vh - 33px);
+`;
+const EditorArea = styled.div`
+  flex: 1;
+  overflow-y: scroll;
+  height: calc(100vh - 33px);
 `;
 
 export function App() {
@@ -22,10 +33,14 @@ export function App() {
   const error = useSelector(selectError);
 
   return (
-    <Content>
+    <AppWrap>
       <Toolbar />
-      <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
-      <TextEditor value={sql} />
-    </Content>
+      <Content>
+        <EditorArea>
+          <TextEditor value={sql} />
+        </EditorArea>
+        <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
+      </Content>
+    </AppWrap>
   );
 }
