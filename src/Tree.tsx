@@ -1,58 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Node, Program } from "sql-parser-cst";
-import styled from "styled-components";
 import { highlightRange, removeHighlight } from "./state/appSlice";
 import { selectCursor } from "./state/appSlice";
+import {
+  ExpandablePropertyName,
+  GrayDiv,
+  GraySpan,
+  NodeList,
+  NodeType,
+  PropertyName,
+  TreeNode,
+  Value,
+} from "./TreeStyles";
 import { getRange, isCursorInside, isNode, toCamelCase } from "./util";
-
-const NodeList = styled.ul`
-  font-size: 14px;
-  font-family: monospace;
-  margin: 0;
-  padding-left: 20px;
-`;
-
-const TreeNode = styled.li<{ expanded?: boolean; expandable?: boolean }>`
-  margin: 0;
-  list-style: none;
-  padding: 5px;
-  position: relative;
-  &::before {
-    content: ${(props) => (props.expanded ? '"-"' : '"+"')};
-    color: ${(props) => (props.expanded ? "red" : "green")};
-    display: ${(props) => (props.expandable ? "inline" : "none")};
-    position: absolute;
-    left: -10px;
-  }
-`;
-
-const NodeType = styled.span`
-  color: #268bd2;
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
-const PropertyName = styled.span`
-  color: #b58900;
-`;
-const ExpandablePropertyName = styled(PropertyName)`
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
-const Value = styled.span`
-  color: #2aa198;
-`;
-
-const GraySpan = styled.span`
-  color: #93a1a1;
-`;
-const GrayDiv = styled.div`
-  color: #93a1a1;
-`;
 
 function typeName(obj: object): string {
   if ("type" in obj) {
