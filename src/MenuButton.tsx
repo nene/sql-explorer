@@ -7,6 +7,15 @@ import {
   selectDialects,
   setActiveDialect,
 } from "./state/appSlice";
+import mysql from "./assets/mysql.png";
+import bigquery from "./assets/bigquery.png";
+import sqlite from "./assets/sqlite.png";
+
+const icons = {
+  mysql,
+  bigquery,
+  sqlite,
+};
 
 const MenuButtonArea = styled.div`
   cursor: pointer;
@@ -32,10 +41,22 @@ const Menu = styled.ul<{ expanded?: boolean }>`
 const MenuItem = styled.li`
   list-style: none;
   padding: 0 10px;
+  white-space: nowrap;
   &:hover {
     background: #0000001a;
   }
 `;
+
+const IconImg = styled.img`
+  background-color: #ffffffaa;
+  padding: 2px;
+  position: relative;
+  top: 4px;
+`;
+
+const DialectIcon = ({ id }: { id: DialectName }) => (
+  <IconImg src={icons[id]} alt="" />
+);
 
 export function MenuButton() {
   const [expanded, setExpanded] = useState(false);
@@ -56,14 +77,14 @@ export function MenuButton() {
       onMouseOver={() => setExpanded(true)}
       onMouseOut={() => setExpanded(false)}
     >
-      DB: {activeDialect.name}
+      <DialectIcon id={activeDialect.id} /> {activeDialect.name}
       <Menu expanded={expanded}>
         {dialects.map((dialect) => (
           <MenuItem
             key={dialect.id}
             onClick={() => activateDialect(dialect.id)}
           >
-            {dialect.name}
+            <DialectIcon id={dialect.id} /> {dialect.name}
           </MenuItem>
         ))}
       </Menu>
