@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { parse } from "sql-parser-cst";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { selectCst, selectError, selectSql, setSql } from "./state/appSlice";
 import { TextEditor } from "./TextEditor";
 import { Toolbar } from "./Toolbar";
 import { Tree } from "./Tree";
@@ -16,30 +17,22 @@ const TreeArea = styled.div`
   overflow-y: scroll;
 `;
 
-const parseSql = (sql: string) =>
-  parse(sql, { dialect: "sqlite", includeRange: true });
-
-const emptyProgram = parseSql("");
-
 export function App() {
-  const [sql, setSql] = useState(" SELECT * FROM my_tbl");
-  const [cst, setCst] = useState(emptyProgram);
-  const [error, setError] = useState("");
+  const sql = useSelector(selectSql);
+  const cst = useSelector(selectCst);
+  const error = useSelector(selectError);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    try {
-      setCst(parseSql(sql));
-      setError("");
-    } catch (e) {
-      setError((e as any).message);
-    }
-  }, [sql, setCst, setError]);
+  const onSqlChange = useCallback(
+    (sql: string) => dispatch(setSql(sql)),
+    [dispatch]
+  );
 
   return (
     <Content>
       <Toolbar />
       <TreeArea>{error ? <pre>{error}</pre> : <Tree data={cst} />}</TreeArea>
-      <TextEditor value={sql} onChange={setSql} />
+      <TextEditor value={sql} onChange={onSqlChange} />
     </Content>
   );
 }
