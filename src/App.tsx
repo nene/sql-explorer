@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { selectCst, selectError, selectSql, setSql } from "./state/appSlice";
 import { TextEditor } from "./TextEditor";
 import { Toolbar } from "./Toolbar";
-import { Tree } from "./Tree";
+import { Tree } from "./tree/Tree";
 
 const Content = styled.div`
   display: flex;

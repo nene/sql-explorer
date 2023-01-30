@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Node, Program } from "sql-parser-cst";
-import { highlightRange, removeHighlight } from "./state/appSlice";
-import { selectCursor } from "./state/appSlice";
+import { highlightRange, removeHighlight } from "../state/appSlice";
+import { selectCursor } from "../state/appSlice";
 import {
   ExpandablePropertyName,
   GrayDiv,
@@ -13,7 +13,7 @@ import {
   TreeNode,
   Value,
 } from "./TreeStyles";
-import { getRange, isCursorInside, isNode, toCamelCase } from "./util";
+import { getRange, isCursorInside, isNode, toCamelCase } from "../util";
 
 function typeName(obj: object): string {
   if ("type" in obj) {
