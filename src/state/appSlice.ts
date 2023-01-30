@@ -16,7 +16,15 @@ const updateCst = (state: AppState): AppState => {
   }
 };
 
-const initialSql = " SELECT * FROM my_tbl";
+const initialSql = `SELECT
+  id, name, address AS addr
+FROM
+  customer
+WHERE
+  customer.due_date > NOW()
+ORDER BY
+  name DESC
+`;
 const initialCst = parseSql(initialSql, "sqlite");
 
 type Dialect = { id: DialectName; name: string; active?: boolean };
