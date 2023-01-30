@@ -11,9 +11,9 @@ export const isNode = (value: any): value is Node =>
 
 export const getRange = (node: Node): [number, number] => node.range ?? [0, 0];
 
-export const isCursorInside = (cursor: number, node: Node) => {
+export const isPositionInside = (node: Node, position: number) => {
   const range = getRange(node);
-  return range[0] <= cursor && cursor <= range[1];
+  return range[0] <= position && position <= range[1];
 };
 
 export function toCamelCase(str: string): string {
