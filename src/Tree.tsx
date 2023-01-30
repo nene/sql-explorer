@@ -226,5 +226,9 @@ function ArrayElementList({ value }: { value: (Node | Literal)[] }) {
 }
 
 export function Tree({ data }: { data: Program }) {
-  return <ObjectPropertyNode value={data} expanded={true} />;
+  return (
+    <NodeList>
+      <ObjectPropertyNode value={data} expanded={true} />
+    </NodeList>
+  );
 }
