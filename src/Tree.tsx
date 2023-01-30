@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Node, Program } from "sql-parser-cst";
 import styled from "styled-components";
 import { highlightRange, removeHighlight } from "./state/appSlice";
 import { selectCursor } from "./state/appSlice";
@@ -87,14 +88,15 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
 const isObject = (value: any): value is Object =>
   typeof value === "object" && !Array.isArray(value) && value !== null;
 
-const isCursorInside = (cursor: number, node: object) => {
-  if (!("range" in node)) {
-    console.log(node);
-    return false;
-  }
-  const range: [number, number] = (node as any).range;
+const isNode = (value: any): value is Node =>
+  isObject(value) && typeof value.type === "string";
+
+const isCursorInside = (cursor: number, node: Node) => {
+  const range = getRange(node);
   return range[0] <= cursor && cursor <= range[1];
 };
+
+const getRange = (node: Node): [number, number] => node.range ?? [0, 0];
 
 function ObjectPropertyNode({
   name,
@@ -102,7 +104,7 @@ function ObjectPropertyNode({
   expanded: startExpanded,
 }: {
   name?: string;
-  value: object;
+  value: Node;
   expanded?: boolean;
 }) {
   const [expanded, setExpanded] = useState(startExpanded || false);
@@ -127,7 +129,7 @@ function ObjectPropertyNode({
       ) : null}
       <NodeType
         onClick={() => setExpanded(!expanded)}
-        onMouseOver={() => dispatch(highlightRange((value as any).range))}
+        onMouseOver={() => dispatch(highlightRange(getRange(value)))}
         onMouseOut={() => dispatch(removeHighlight())}
       >
         {typeName(value)}
@@ -145,11 +147,17 @@ function ObjectPropertyNode({
   );
 }
 
-function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
+function ArrayPropertyNode({
+  name,
+  value,
+}: {
+  name?: string;
+  value: (Node | Literal)[];
+}) {
   const [expanded, setExpanded] = useState(false);
   const cursor = useSelector(selectCursor);
   useEffect(() => {
-    if (value.some((x) => isObject(x) && isCursorInside(cursor, x))) {
+    if (value.some((x) => (isNode(x) ? isCursorInside(cursor, x) : false))) {
       setExpanded(true);
     }
   }, [cursor, value, setExpanded]);
@@ -174,17 +182,25 @@ function ArrayPropertyNode({ name, value }: { name?: string; value: any[] }) {
   );
 }
 
-function PropertyNode(props: { name?: string; value: any }) {
-  if (props.value instanceof Array) {
-    return <ArrayPropertyNode {...props} />;
-  } else if (typeof props.value === "object" && props.value !== null) {
-    return <ObjectPropertyNode {...props} />;
+type Literal = string | number | boolean | null | undefined;
+
+function PropertyNode({
+  name,
+  value,
+}: {
+  name?: string;
+  value: Node | Node[] | Literal;
+}) {
+  if (value instanceof Array) {
+    return <ArrayPropertyNode name={name} value={value} />;
+  } else if (typeof value === "object" && value !== null) {
+    return <ObjectPropertyNode name={name} value={value} />;
   } else {
-    return <PlainPropertyNode {...props} />;
+    return <PlainPropertyNode name={name} value={value} />;
   }
 }
 
-function PropertyList({ value }: { value: object }) {
+function PropertyList({ value }: { value: Node }) {
   return (
     <NodeList>
       {Object.entries(value)
@@ -196,7 +212,7 @@ function PropertyList({ value }: { value: object }) {
   );
 }
 
-function ArrayElementList({ value }: { value: any[] }) {
+function ArrayElementList({ value }: { value: (Node | Literal)[] }) {
   if (value.length === 0) {
     return null;
   }
@@ -209,6 +225,6 @@ function ArrayElementList({ value }: { value: any[] }) {
   );
 }
 
-export function Tree({ data }: { data: object }) {
+export function Tree({ data }: { data: Program }) {
   return <ObjectPropertyNode value={data} expanded={true} />;
 }
