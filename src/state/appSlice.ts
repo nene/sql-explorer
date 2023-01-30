@@ -1,6 +1,6 @@
 import { createSlice, original } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Node, parse, Program } from "sql-parser-cst";
+import { DialectName, Node, parse, Program } from "sql-parser-cst";
 import { nodesAtPosition } from "./nodesAtPosition";
 import { last } from "../util";
 
@@ -8,6 +8,8 @@ const parseSql = (sql: string) =>
   parse(sql, { dialect: "sqlite", includeRange: true });
 
 const initialSql = " SELECT * FROM my_tbl";
+
+type Dialect = { id: DialectName; name: string; active?: boolean };
 
 export type AppState = {
   sql: string;
@@ -17,6 +19,7 @@ export type AppState = {
   cursor: number;
   expandedNodes: any[];
   highlightedNode?: any;
+  dialects: Dialect[];
 };
 
 const initialState: AppState = {
@@ -27,6 +30,11 @@ const initialState: AppState = {
   cursor: 0,
   expandedNodes: [],
   highlightedNode: undefined,
+  dialects: [
+    { id: "sqlite", name: "SQLite", active: true },
+    { id: "bigquery", name: "BigQuery" },
+    { id: "mysql", name: "MySQL" },
+  ],
 };
 
 export const appSlice = createSlice({
@@ -78,6 +86,13 @@ export const appSlice = createSlice({
         };
       }
     },
+    setActiveDialect: (state, action: PayloadAction<DialectName>) => {
+      const dialects = state.dialects.map((dialect) => ({
+        ...dialect,
+        active: dialect.id === action.payload,
+      }));
+      return { ...state, dialects };
+    },
   },
 });
 
@@ -87,6 +102,7 @@ export const {
   removeHighlight,
   setCursor,
   toggleNode,
+  setActiveDialect,
 } = appSlice.actions;
 
 export default appSlice.reducer;
@@ -100,3 +116,6 @@ export const selectIsExpanded = (state: AppState, node: any) =>
   state.expandedNodes.includes(node);
 export const selectIsHighlighted = (state: AppState, node: any) =>
   state.highlightedNode === node;
+export const selectDialects = (state: AppState) => state.dialects;
+export const selectActiveDialect = (state: AppState) =>
+  state.dialects.find((d) => d.active) as Dialect;
