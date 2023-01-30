@@ -5,6 +5,7 @@ export const NodeList = styled.ul`
   font-family: monospace;
   margin: 0;
   padding-left: 20px;
+  user-select: none;
 `;
 
 export const TreeNode = styled.li<{
