@@ -5,7 +5,7 @@ import { nodesAtPosition } from "./nodesAtPosition";
 import { last } from "../util";
 
 const parseSql = (sql: string, dialect: DialectName) =>
-  parse(sql, { dialect, includeRange: true });
+  parse(sql, { dialect, includeRange: true, includeComments: true });
 
 const updateCst = (state: AppState): AppState => {
   try {
@@ -16,7 +16,8 @@ const updateCst = (state: AppState): AppState => {
   }
 };
 
-const initialSql = `SELECT
+const initialSql = `-- example SQL
+SELECT
   id, name, address AS addr
 FROM
   customer
