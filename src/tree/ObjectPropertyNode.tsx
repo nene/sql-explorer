@@ -11,7 +11,7 @@ import {
   NodeType,
   TreeNode,
 } from "./TreeStyles";
-import { getRange, isCursorInside, toCamelCase } from "../util";
+import { getRange, isCursorInside, isNode, toCamelCase } from "../util";
 import { PropertyNode } from "./PropertyNode";
 
 export function ObjectPropertyNode({
@@ -79,10 +79,6 @@ function isPropertyVisible(name: string, value: any): boolean {
   return value !== undefined;
 }
 
-function typeName(obj: object): string {
-  if ("type" in obj) {
-    return toCamelCase(obj.type as string);
-  } else {
-    return "";
-  }
+function typeName(obj: any): string {
+  return isNode(obj) ? toCamelCase(obj.type) : "";
 }
