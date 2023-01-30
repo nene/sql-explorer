@@ -4,6 +4,7 @@ import { Node, Program } from "sql-parser-cst";
 import styled from "styled-components";
 import { highlightRange, removeHighlight } from "./state/appSlice";
 import { selectCursor } from "./state/appSlice";
+import { getRange, isCursorInside, isNode, toCamelCase } from "./util";
 
 const NodeList = styled.ul`
   font-size: 14px;
@@ -53,12 +54,6 @@ const GrayDiv = styled.div`
   color: #93a1a1;
 `;
 
-function toCamelCase(str: string): string {
-  return str
-    .replace(/_(.)/g, (s, s1) => s1.toUpperCase())
-    .replace(/^(.)/, (s, s1) => s1.toUpperCase());
-}
-
 function typeName(obj: object): string {
   if ("type" in obj) {
     return toCamelCase(obj.type as string);
@@ -84,19 +79,6 @@ function PlainPropertyNode({ name, value }: { name?: string; value: any }) {
     </TreeNode>
   );
 }
-
-const isObject = (value: any): value is Object =>
-  typeof value === "object" && !Array.isArray(value) && value !== null;
-
-const isNode = (value: any): value is Node =>
-  isObject(value) && typeof value.type === "string";
-
-const isCursorInside = (cursor: number, node: Node) => {
-  const range = getRange(node);
-  return range[0] <= cursor && cursor <= range[1];
-};
-
-const getRange = (node: Node): [number, number] => node.range ?? [0, 0];
 
 function ObjectPropertyNode({
   name,
