@@ -4,7 +4,7 @@ import { sql } from "@codemirror/lang-sql";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCursor } from "./state/cursorSlice";
-import { highlightRange } from "./highlightRange";
+import { highlightEditorRange } from "./highlightEditorRange";
 import { EditorView } from "@codemirror/view";
 import { selectHighlight } from "./state/highlightSlice";
 
@@ -37,7 +37,7 @@ export function TextEditor({
 
   useEffect(() => {
     if (editorView) {
-      highlightRange(editorView, highlight);
+      highlightEditorRange(editorView, highlight);
     }
   }, [editorView, highlight]);
 

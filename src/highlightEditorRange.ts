@@ -40,7 +40,10 @@ const highlightTheme = EditorView.baseTheme({
   ".cm-highlight": { background: "#fff00666" },
 });
 
-export function highlightRange(view: EditorView, [from, to]: [number, number]) {
+export function highlightEditorRange(
+  view: EditorView,
+  [from, to]: [number, number]
+) {
   const effects: StateEffect<any>[] = [addHighlight.of({ from, to })];
 
   // called for for the first time, initialize the state field and theme
