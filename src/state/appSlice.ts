@@ -4,10 +4,20 @@ import { DialectName, Node, parse, Program } from "sql-parser-cst";
 import { nodesAtPosition } from "./nodesAtPosition";
 import { last } from "../util";
 
-const parseSql = (sql: string) =>
-  parse(sql, { dialect: "sqlite", includeRange: true });
+const parseSql = (sql: string, dialect: DialectName) =>
+  parse(sql, { dialect, includeRange: true });
+
+const updateCst = (state: AppState): AppState => {
+  try {
+    const cst = parseSql(state.sql, selectActiveDialect(state).id);
+    return { ...state, cst, error: "", expandedNodes: [cst] };
+  } catch (e) {
+    return { ...state, error: (e as any).message };
+  }
+};
 
 const initialSql = " SELECT * FROM my_tbl";
+const initialCst = parseSql(initialSql, "sqlite");
 
 type Dialect = { id: DialectName; name: string; active?: boolean };
 
@@ -24,11 +34,11 @@ export type AppState = {
 
 const initialState: AppState = {
   sql: initialSql,
-  cst: parseSql(initialSql),
+  cst: initialCst,
   error: "",
   highlight: [0, 0],
   cursor: 0,
-  expandedNodes: [],
+  expandedNodes: [initialCst],
   highlightedNode: undefined,
   dialects: [
     { id: "sqlite", name: "SQLite", active: true },
@@ -42,13 +52,7 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setSql: (state, action: PayloadAction<string>) => {
-      const sql = action.payload;
-      try {
-        const cst = parseSql(sql);
-        return { ...state, sql, cst, error: "", expandedNodes: [cst] };
-      } catch (e) {
-        return { ...state, sql, error: (e as any).message };
-      }
+      return updateCst({ ...state, sql: action.payload });
     },
     highlightRange: (state, action: PayloadAction<[number, number]>) => {
       return { ...state, highlight: action.payload };
@@ -91,7 +95,7 @@ export const appSlice = createSlice({
         ...dialect,
         active: dialect.id === action.payload,
       }));
-      return { ...state, dialects };
+      return updateCst({ ...state, dialects });
     },
   },
 });
