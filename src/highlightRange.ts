@@ -14,12 +14,11 @@ const highlightField = StateField.define<DecorationSet>({
   },
   update(highlights, tr) {
     highlights = highlights.map(tr.changes);
-    for (let e of tr.effects) {
-      if (e.is(addHighlight)) {
-        highlights = highlights.update({
-          add: [highlightMark.range(e.value.from, e.value.to)],
-        });
-      }
+    const hlEffect = tr.effects.find((e) => e.is(addHighlight));
+    if (hlEffect) {
+      return Decoration.none.update({
+        add: [highlightMark.range(hlEffect.value.from, hlEffect.value.to)],
+      });
     }
     return highlights;
   },
