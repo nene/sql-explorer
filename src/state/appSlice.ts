@@ -32,7 +32,8 @@ export const appSlice = createSlice({
     setSql: (state, action: PayloadAction<string>) => {
       const sql = action.payload;
       try {
-        return { ...state, sql, cst: parseSql(sql), error: "" };
+        const cst = parseSql(sql);
+        return { ...state, sql, cst, error: "", expandedNodes: [cst] };
       } catch (e) {
         return { ...state, sql, error: (e as any).message };
       }
