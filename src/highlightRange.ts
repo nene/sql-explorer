@@ -12,9 +12,13 @@ const highlightField = StateField.define<DecorationSet>({
   create() {
     return Decoration.none;
   },
-  update(highlights, tr) {
-    highlights = highlights.map(tr.changes);
-    const hlEffect = tr.effects.find((e) => e.is(addHighlight));
+  update(highlights, transaction) {
+    // ensure highlighted area moves along with text changes
+    highlights = highlights.map(transaction.changes);
+
+    // when addHighlight effect occurs in transaction,
+    // add the highlight decoration.
+    const hlEffect = transaction.effects.find((e) => e.is(addHighlight));
     if (hlEffect) {
       if (hlEffect.value.from === hlEffect.value.to) {
         // Empty mark regions are invalid, instead skip the decoration completely.
@@ -37,11 +41,11 @@ const highlightTheme = EditorView.baseTheme({
 });
 
 export function highlightRange(view: EditorView, [from, to]: [number, number]) {
-  let effects: StateEffect<unknown>[] = [addHighlight.of({ from, to })];
+  const effects: StateEffect<any>[] = [addHighlight.of({ from, to })];
 
+  // called for for the first time, initialize the state field and theme
   if (!view.state.field(highlightField, false)) {
     effects.push(StateEffect.appendConfig.of([highlightField, highlightTheme]));
   }
   view.dispatch({ effects });
-  return true;
 }
