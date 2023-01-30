@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "./store";
 
 export type AppState = {
   highlight: [number, number];
@@ -32,5 +31,5 @@ export const { highlightRange, removeHighlight, setCursor } = appSlice.actions;
 
 export default appSlice.reducer;
 
-export const selectHighlight = (state: RootState) => state.app.highlight;
-export const selectCursor = (state: RootState) => state.app.cursor;
+export const selectHighlight = (state: AppState) => state.highlight;
+export const selectCursor = (state: AppState) => state.cursor;
