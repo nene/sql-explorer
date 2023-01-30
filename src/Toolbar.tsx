@@ -88,11 +88,22 @@ function MenuButton() {
   );
 }
 
+const GithubLink = styled.div`
+  flex: 1;
+  text-align: right;
+  padding: 0 10px;
+`;
+
 export function Toolbar() {
   return (
     <ToolbarArea>
       <Title>SQL Explorer</Title>
       <MenuButton />
+      <GithubLink>
+        <a href="https://github.com/nene/sql-parser-cst">
+          GitHub: SQL Parser CST
+        </a>
+      </GithubLink>
     </ToolbarArea>
   );
 }
