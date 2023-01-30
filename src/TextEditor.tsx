@@ -3,10 +3,10 @@ import CodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCursor } from "./state/cursorSlice";
+import { setCursor } from "./state/appSlice";
 import { highlightEditorRange } from "./highlightEditorRange";
 import { EditorView } from "@codemirror/view";
-import { selectHighlight } from "./state/highlightSlice";
+import { selectHighlight } from "./state/appSlice";
 
 const EditorBorder = styled.div`
   border: 2px solid #ddd;

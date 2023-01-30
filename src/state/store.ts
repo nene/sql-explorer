@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import cursorReducer from "./cursorSlice";
-import highlightReducer from "./highlightSlice";
+import appReducer from "./appSlice";
 
 export const store = configureStore({
   reducer: {
-    cursor: cursorReducer,
-    highlight: highlightReducer,
+    app: appReducer,
   },
 });
 

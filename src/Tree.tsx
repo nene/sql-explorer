@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { highlightRange, removeHighlight } from "./state/highlightSlice";
-import { selectCursor } from "./state/cursorSlice";
+import { highlightRange, removeHighlight } from "./state/appSlice";
+import { selectCursor } from "./state/appSlice";
 
 const NodeList = styled.ul`
   font-size: 14px;
