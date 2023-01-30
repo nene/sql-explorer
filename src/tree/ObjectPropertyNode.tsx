@@ -6,6 +6,7 @@ import {
   highlightRange,
   removeHighlight,
   selectIsExpanded,
+  selectIsHighlighted,
   toggleNode,
 } from "../state/appSlice";
 import {
@@ -30,13 +31,16 @@ export function ObjectPropertyNode({
   const expanded = useSelector((state: AppState) =>
     selectIsExpanded(state, value)
   );
+  const highlighted = useSelector((state: AppState) =>
+    selectIsHighlighted(state, value)
+  );
   const dispatch = useDispatch();
   const toggle = useCallback(() => {
     dispatch(toggleNode(value));
   }, [dispatch, value]);
 
   return (
-    <TreeNode expandable expanded={expanded}>
+    <TreeNode expandable expanded={expanded} highlighted={highlighted}>
       {name ? (
         <>
           <ExpandablePropertyName onClick={toggle}>

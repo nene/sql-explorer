@@ -7,11 +7,16 @@ export const NodeList = styled.ul`
   padding-left: 20px;
 `;
 
-export const TreeNode = styled.li<{ expanded?: boolean; expandable?: boolean }>`
+export const TreeNode = styled.li<{
+  expanded?: boolean;
+  expandable?: boolean;
+  highlighted?: boolean;
+}>`
   margin: 0;
   list-style: none;
   padding: 5px;
   position: relative;
+  background: ${(props) => (props.highlighted ? "#fff00666" : "none")};
   &::before {
     content: ${(props) => (props.expanded ? '"-"' : '"+"')};
     color: ${(props) => (props.expanded ? "red" : "green")};

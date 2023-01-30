@@ -21,3 +21,5 @@ export function toCamelCase(str: string): string {
     .replace(/_(.)/g, (s, s1) => s1.toUpperCase())
     .replace(/^(.)/, (s, s1) => s1.toUpperCase());
 }
+
+export const last = <T>(arr: T[]): T => arr[arr.length - 1];
