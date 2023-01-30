@@ -13,10 +13,13 @@ export const highlightSlice = createSlice({
     highlightRange: (state, action: PayloadAction<[number, number]>) => {
       return action.payload;
     },
+    removeHighlight: (state, action: PayloadAction<void>) => {
+      return [0, 0];
+    },
   },
 });
 
-export const { highlightRange } = highlightSlice.actions;
+export const { highlightRange, removeHighlight } = highlightSlice.actions;
 
 export default highlightSlice.reducer;
 

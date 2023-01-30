@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { highlightRange } from "./state/highlightSlice";
+import { highlightRange, removeHighlight } from "./state/highlightSlice";
 import { selectCursor } from "./state/cursorSlice";
 
 const NodeList = styled.ul`
@@ -128,6 +128,7 @@ function ObjectPropertyNode({
       <NodeType
         onClick={() => setExpanded(!expanded)}
         onMouseOver={() => dispatch(highlightRange((value as any).range))}
+        onMouseOut={() => dispatch(removeHighlight())}
       >
         {typeName(value)}
       </NodeType>

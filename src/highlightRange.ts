@@ -16,9 +16,14 @@ const highlightField = StateField.define<DecorationSet>({
     highlights = highlights.map(tr.changes);
     const hlEffect = tr.effects.find((e) => e.is(addHighlight));
     if (hlEffect) {
-      return Decoration.none.update({
-        add: [highlightMark.range(hlEffect.value.from, hlEffect.value.to)],
-      });
+      if (hlEffect.value.from === hlEffect.value.to) {
+        // Empty mark regions are invalid, instead skip the decoration completely.
+        return Decoration.none;
+      } else {
+        return Decoration.none.update({
+          add: [highlightMark.range(hlEffect.value.from, hlEffect.value.to)],
+        });
+      }
     }
     return highlights;
   },
