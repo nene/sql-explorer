@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Node } from "sql-parser-cst";
 import { highlightRange, removeHighlight } from "../state/appSlice";
-import { selectCursor } from "../state/appSlice";
 import {
   ExpandablePropertyName,
   GrayDiv,
@@ -11,7 +10,7 @@ import {
   NodeType,
   TreeNode,
 } from "./TreeStyles";
-import { getRange, isCursorInside, isNode, toCamelCase } from "../util";
+import { getRange, isNode, toCamelCase } from "../util";
 import { PropertyNode } from "./PropertyNode";
 
 export function ObjectPropertyNode({
@@ -24,14 +23,7 @@ export function ObjectPropertyNode({
   expanded?: boolean;
 }) {
   const [expanded, setExpanded] = useState(startExpanded || false);
-  const cursor = useSelector(selectCursor);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isCursorInside(cursor, value)) {
-      setExpanded(true);
-    }
-  }, [cursor, value, setExpanded]);
 
   return (
     <TreeNode expandable expanded={expanded}>

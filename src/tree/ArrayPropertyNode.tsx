@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useState } from "react";
 import { Node } from "sql-parser-cst";
-import { selectCursor } from "../state/appSlice";
 import {
   ExpandablePropertyName,
   GrayDiv,
@@ -9,7 +7,6 @@ import {
   NodeList,
   TreeNode,
 } from "./TreeStyles";
-import { isCursorInside, isNode } from "../util";
 import { Literal } from "./Literal";
 import { PropertyNode } from "./PropertyNode";
 
@@ -21,12 +18,6 @@ export function ArrayPropertyNode({
   value: (Node | Literal)[];
 }) {
   const [expanded, setExpanded] = useState(false);
-  const cursor = useSelector(selectCursor);
-  useEffect(() => {
-    if (value.some((x) => (isNode(x) ? isCursorInside(cursor, x) : false))) {
-      setExpanded(true);
-    }
-  }, [cursor, value, setExpanded]);
 
   return (
     <TreeNode expandable expanded={expanded}>
