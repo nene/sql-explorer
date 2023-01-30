@@ -3,7 +3,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCursor } from "./state/appSlice";
+import { setCursor, setSql } from "./state/appSlice";
 import { highlightEditorRange } from "./highlightEditorRange";
 import { EditorView } from "@codemirror/view";
 import { selectHighlight } from "./state/appSlice";
@@ -14,17 +14,16 @@ const EditorBorder = styled.div`
 
 const extensions = [sql()];
 
-export function TextEditor({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (s: string) => void;
-}) {
+export function TextEditor({ value }: { value: string }) {
   const dispatch = useDispatch();
   const highlight = useSelector(selectHighlight);
   const [editorView, setEditorView] = useState<EditorView | undefined>(
     undefined
+  );
+
+  const onSqlChange = useCallback(
+    (sql: string) => dispatch(setSql(sql)),
+    [dispatch]
   );
 
   const onUpdate = useCallback(
@@ -47,7 +46,7 @@ export function TextEditor({
         value={value}
         height="200px"
         extensions={extensions}
-        onChange={onChange}
+        onChange={onSqlChange}
         onUpdate={onUpdate}
         onCreateEditor={setEditorView}
       />
