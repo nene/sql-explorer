@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, original } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { parse, Program } from "sql-parser-cst";
 
@@ -13,6 +13,7 @@ export type AppState = {
   error: string;
   highlight: [number, number];
   cursor: number;
+  expandedNodes: any[];
 };
 
 const initialState: AppState = {
@@ -21,6 +22,7 @@ const initialState: AppState = {
   error: "",
   highlight: [0, 0],
   cursor: 0,
+  expandedNodes: [],
 };
 
 export const appSlice = createSlice({
@@ -44,11 +46,31 @@ export const appSlice = createSlice({
     setCursor: (state, action: PayloadAction<number>) => {
       return { ...state, cursor: action.payload };
     },
+    toggleNode: (immerState, action: PayloadAction<object>) => {
+      const state = original(immerState) as unknown as AppState;
+      const node = action.payload;
+      if (selectIsExpanded(state, node)) {
+        return {
+          ...state,
+          expandedNodes: state.expandedNodes.filter((x) => x !== node),
+        };
+      } else {
+        return {
+          ...state,
+          expandedNodes: [...state.expandedNodes, node],
+        };
+      }
+    },
   },
 });
 
-export const { setSql, highlightRange, removeHighlight, setCursor } =
-  appSlice.actions;
+export const {
+  setSql,
+  highlightRange,
+  removeHighlight,
+  setCursor,
+  toggleNode,
+} = appSlice.actions;
 
 export default appSlice.reducer;
 
@@ -57,3 +79,5 @@ export const selectCursor = (state: AppState) => state.cursor;
 export const selectSql = (state: AppState) => state.sql;
 export const selectCst = (state: AppState) => state.cst;
 export const selectError = (state: AppState) => state.error;
+export const selectIsExpanded = (state: AppState, node: any) =>
+  state.expandedNodes.includes(node);

@@ -5,7 +5,7 @@ import { ObjectPropertyNode } from "./ObjectPropertyNode";
 export function Tree({ data }: { data: Program }) {
   return (
     <NodeList>
-      <ObjectPropertyNode value={data} expanded={true} />
+      <ObjectPropertyNode value={data} />
     </NodeList>
   );
 }

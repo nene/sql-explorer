@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback } from "react";
 import { Node } from "sql-parser-cst";
 import {
   ExpandablePropertyName,
@@ -9,6 +9,8 @@ import {
 } from "./TreeStyles";
 import { Literal } from "./Literal";
 import { PropertyNode } from "./PropertyNode";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState, selectIsExpanded, toggleNode } from "../state/appSlice";
 
 export function ArrayPropertyNode({
   name,
@@ -17,14 +19,18 @@ export function ArrayPropertyNode({
   name?: string;
   value: (Node | Literal)[];
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const expanded = useSelector((state: AppState) =>
+    selectIsExpanded(state, value)
+  );
+  const dispatch = useDispatch();
+  const toggle = useCallback(() => {
+    dispatch(toggleNode(value));
+  }, [dispatch, value]);
 
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (
-        <ExpandablePropertyName onClick={() => setExpanded(!expanded)}>
-          {name}
-        </ExpandablePropertyName>
+        <ExpandablePropertyName onClick={toggle}>{name}</ExpandablePropertyName>
       ) : null}
       {name ? <GraySpan>{": ["}</GraySpan> : <GraySpan>{"["}</GraySpan>}
       {expanded ? (

@@ -1,7 +1,13 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Node } from "sql-parser-cst";
-import { highlightRange, removeHighlight } from "../state/appSlice";
+import {
+  AppState,
+  highlightRange,
+  removeHighlight,
+  selectIsExpanded,
+  toggleNode,
+} from "../state/appSlice";
 import {
   ExpandablePropertyName,
   GrayDiv,
@@ -16,27 +22,31 @@ import { PropertyNode } from "./PropertyNode";
 export function ObjectPropertyNode({
   name,
   value,
-  expanded: startExpanded,
 }: {
   name?: string;
   value: Node;
   expanded?: boolean;
 }) {
-  const [expanded, setExpanded] = useState(startExpanded || false);
+  const expanded = useSelector((state: AppState) =>
+    selectIsExpanded(state, value)
+  );
   const dispatch = useDispatch();
+  const toggle = useCallback(() => {
+    dispatch(toggleNode(value));
+  }, [dispatch, value]);
 
   return (
     <TreeNode expandable expanded={expanded}>
       {name ? (
         <>
-          <ExpandablePropertyName onClick={() => setExpanded(!expanded)}>
+          <ExpandablePropertyName onClick={toggle}>
             {name}
           </ExpandablePropertyName>
           <GraySpan>{": "}</GraySpan>
         </>
       ) : null}
       <NodeType
-        onClick={() => setExpanded(!expanded)}
+        onClick={toggle}
         onMouseOver={() => dispatch(highlightRange(getRange(value)))}
         onMouseOut={() => dispatch(removeHighlight())}
       >
