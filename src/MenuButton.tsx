@@ -38,6 +38,7 @@ const Menu = styled.ul<{ expanded?: boolean }>`
   background: #efefef;
   z-index: 1;
   display: ${(props) => (props.expanded ? "block" : "none")};
+  box-shadow: 5px 5px 8px 1px #00000075;
 `;
 
 const MenuItem = styled.li`
