@@ -4,17 +4,23 @@ import { DialectName, Node, parse, Program } from "sql-parser-cst";
 import { nodesAtPosition } from "./nodesAtPosition";
 import { last } from "../util";
 
-const parseSql = (sql: string, dialect: DialectName) =>
-  parse(sql, { dialect, includeRange: true, includeComments: true });
+const parseSql = (sql: string, dialect: DialectName, includes: Includes) =>
+  parse(sql, { dialect, includeRange: true, ...includes });
 
 const updateCst = (state: AppState): AppState => {
   try {
-    const cst = parseSql(state.sql, selectActiveDialect(state).id);
+    const cst = parseSql(
+      state.sql,
+      selectActiveDialect(state).id,
+      state.includes
+    );
     return { ...state, cst, error: "", expandedNodes: [cst] };
   } catch (e) {
     return { ...state, error: (e as any).message };
   }
 };
+
+const initialIncludes: Includes = { includeComments: true };
 
 const initialSql = `-- example SQL
 SELECT
@@ -26,9 +32,12 @@ WHERE
 ORDER BY
   name DESC
 `;
-const initialCst = parseSql(initialSql, "sqlite");
+const initialCst = parseSql(initialSql, "sqlite", initialIncludes);
 
 type Dialect = { id: DialectName; name: string; active?: boolean };
+type Includes = {
+  includeComments: boolean;
+};
 
 export type AppState = {
   sql: string;
@@ -40,6 +49,7 @@ export type AppState = {
   highlightedNode?: any;
   dialects: Dialect[];
   showRange: boolean;
+  includes: Includes;
 };
 
 const initialState: AppState = {
@@ -57,6 +67,7 @@ const initialState: AppState = {
     { id: "mariadb", name: "MariaDB" },
   ],
   showRange: true,
+  includes: initialIncludes,
 };
 
 export const appSlice = createSlice({
@@ -112,6 +123,12 @@ export const appSlice = createSlice({
     setShowRange: (state, action: PayloadAction<boolean>) => {
       return { ...state, showRange: action.payload };
     },
+    setIncludes: (state, action: PayloadAction<Partial<Includes>>) => {
+      return updateCst({
+        ...state,
+        includes: { ...state.includes, ...action.payload },
+      });
+    },
   },
 });
 
@@ -123,6 +140,7 @@ export const {
   toggleNode,
   setActiveDialect,
   setShowRange,
+  setIncludes,
 } = appSlice.actions;
 
 export default appSlice.reducer;
@@ -140,3 +158,4 @@ export const selectDialects = (state: AppState) => state.dialects;
 export const selectActiveDialect = (state: AppState) =>
   state.dialects.find((d) => d.active) as Dialect;
 export const selectShowRange = (state: AppState) => state.showRange;
+export const selectIncludes = (state: AppState) => state.includes;
