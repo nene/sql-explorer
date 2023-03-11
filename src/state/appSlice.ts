@@ -20,7 +20,11 @@ const updateCst = (state: AppState): AppState => {
   }
 };
 
-const initialIncludes: Includes = { includeComments: true };
+const initialIncludes: Includes = {
+  includeComments: true,
+  includeNewlines: false,
+  includeSpaces: false,
+};
 
 const initialSql = `-- example SQL
 SELECT
@@ -37,6 +41,8 @@ const initialCst = parseSql(initialSql, "sqlite", initialIncludes);
 type Dialect = { id: DialectName; name: string; active?: boolean };
 type Includes = {
   includeComments: boolean;
+  includeNewlines: boolean;
+  includeSpaces: boolean;
 };
 
 export type AppState = {

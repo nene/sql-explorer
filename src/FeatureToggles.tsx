@@ -19,7 +19,8 @@ const Label = styled.label`
 export function FeatureToggles() {
   const dispatch = useDispatch();
   const showRange = useSelector(selectShowRange);
-  const { includeComments } = useSelector(selectIncludes);
+  const { includeComments, includeNewlines, includeSpaces } =
+    useSelector(selectIncludes);
 
   return (
     <Wrap>
@@ -41,6 +42,26 @@ export function FeatureToggles() {
           }
         />
         comments
+      </Label>
+      <Label>
+        <input
+          type="checkbox"
+          checked={includeNewlines}
+          onChange={(e) =>
+            dispatch(setIncludes({ includeNewlines: e.target.checked }))
+          }
+        />
+        newlines
+      </Label>
+      <Label>
+        <input
+          type="checkbox"
+          checked={includeSpaces}
+          onChange={(e) =>
+            dispatch(setIncludes({ includeSpaces: e.target.checked }))
+          }
+        />
+        spaces
       </Label>
     </Wrap>
   );
