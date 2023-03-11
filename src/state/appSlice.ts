@@ -53,6 +53,7 @@ const initialState: AppState = {
     { id: "sqlite", name: "SQLite", active: true },
     { id: "bigquery", name: "BigQuery" },
     { id: "mysql", name: "MySQL" },
+    { id: "mariadb", name: "MariaDB" },
   ],
 };
 
