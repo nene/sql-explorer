@@ -987,10 +987,10 @@ source-map-js@^1.0.2:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-sql-parser-cst@^0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/sql-parser-cst/-/sql-parser-cst-0.14.1.tgz#433d0f078be6c8ce20b0770dd27ea07d5ad73149"
-  integrity sha512-CRJZTRCMGA3vxU9oILIhwqEQY4Luiocful46e5WBvQ9y7W/Ypu4S5jcbVJqSHQ2q1ZEXYhQfSgOfk44R7q8Evw==
+sql-parser-cst@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/sql-parser-cst/-/sql-parser-cst-0.15.0.tgz#94b309310c0b492663bedd5bf75266753eef1db2"
+  integrity sha512-I3FFMlXYit4dGegmFF4NGIYAafhUOqwCETf1GNxjFoBdd1R7Pu9q4XSxc3hN1MgFcviWYx7vq5T2DBQoTiU5pA==
 
 style-mod@^4.0.0:
   version "4.0.0"
