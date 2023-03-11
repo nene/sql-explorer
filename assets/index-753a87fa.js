@@ -124,6 +124,7 @@ ORDER BY
   background: #efefef;
   z-index: 1;
   display: ${i=>i.expanded?"block":"none"};
+  box-shadow: 5px 5px 8px 1px #00000075;
 `,jye=At.li`
   list-style: none;
   padding: 0 10px;
