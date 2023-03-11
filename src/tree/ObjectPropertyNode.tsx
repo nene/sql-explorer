@@ -7,6 +7,7 @@ import {
   removeHighlight,
   selectIsExpanded,
   selectIsHighlighted,
+  selectShowRange,
   toggleNode,
 } from "../state/appSlice";
 import {
@@ -70,10 +71,11 @@ export function ObjectPropertyNode({
 }
 
 function PropertyList({ value }: { value: Node }) {
+  const showRange = useSelector(selectShowRange);
   return (
     <NodeList>
       {Object.entries(value)
-        .filter(([k, v]) => isPropertyVisible(k, v))
+        .filter(([k, v]) => isPropertyVisible(k, v, showRange))
         .map(([name, value]) => (
           <PropertyNode name={name} value={value} key={name} />
         ))}
@@ -81,8 +83,12 @@ function PropertyList({ value }: { value: Node }) {
   );
 }
 
-function isPropertyVisible(name: string, value: any): boolean {
-  return value !== undefined;
+function isPropertyVisible(
+  name: string,
+  value: any,
+  showRange: boolean
+): boolean {
+  return value !== undefined && (name === "range" ? showRange : true);
 }
 
 function typeName(obj: any): string {

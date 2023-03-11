@@ -39,6 +39,7 @@ export type AppState = {
   expandedNodes: any[];
   highlightedNode?: any;
   dialects: Dialect[];
+  showRange: boolean;
 };
 
 const initialState: AppState = {
@@ -55,6 +56,7 @@ const initialState: AppState = {
     { id: "mysql", name: "MySQL" },
     { id: "mariadb", name: "MariaDB" },
   ],
+  showRange: true,
 };
 
 export const appSlice = createSlice({
@@ -107,6 +109,9 @@ export const appSlice = createSlice({
       }));
       return updateCst({ ...state, dialects });
     },
+    setShowRange: (state, action: PayloadAction<boolean>) => {
+      return { ...state, showRange: action.payload };
+    },
   },
 });
 
@@ -117,6 +122,7 @@ export const {
   setCursor,
   toggleNode,
   setActiveDialect,
+  setShowRange,
 } = appSlice.actions;
 
 export default appSlice.reducer;
@@ -133,3 +139,4 @@ export const selectIsHighlighted = (state: AppState, node: any) =>
 export const selectDialects = (state: AppState) => state.dialects;
 export const selectActiveDialect = (state: AppState) =>
   state.dialects.find((d) => d.active) as Dialect;
+export const selectShowRange = (state: AppState) => state.showRange;
