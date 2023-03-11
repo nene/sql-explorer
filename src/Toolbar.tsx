@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { MenuButton } from "./MenuButton";
+import { version } from "sql-parser-cst/package.json";
 
 const Title = styled.h1`
   font-size: 18px;
@@ -31,7 +32,7 @@ export function Toolbar() {
       <MenuButton />
       <GithubLink>
         <a href="https://github.com/nene/sql-parser-cst">
-          GitHub: SQL Parser CST
+          GitHub: SQL Parser CST {version}
         </a>
       </GithubLink>
     </ToolbarArea>
