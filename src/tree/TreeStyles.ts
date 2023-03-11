@@ -45,6 +45,7 @@ export const ExpandablePropertyName = styled(PropertyName)`
 `;
 export const Value = styled.span`
   color: #2aa198;
+  white-space: pre;
 `;
 
 export const GraySpan = styled.span`
