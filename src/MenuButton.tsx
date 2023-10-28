@@ -11,12 +11,14 @@ import mysql from "./assets/mysql.png";
 import mariadb from "./assets/mariadb.png";
 import bigquery from "./assets/bigquery.png";
 import sqlite from "./assets/sqlite.png";
+import postgresql from "./assets/postgresql.png";
 
 const icons = {
   mysql,
   mariadb,
   bigquery,
   sqlite,
+  postgresql,
 };
 
 const MenuButtonArea = styled.div`
