@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "upgrade-parser": "sh upgrade-parser.sh"
   },
   "dependencies": {
     "@codemirror/lang-sql": "^6.4.0",
@@ -16,7 +17,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "sql-parser-cst": "^0.25.0",
+    "sql-parser-cst": "^0.27.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
