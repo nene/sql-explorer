@@ -72,6 +72,7 @@ const initialState: AppState = {
     { id: "mysql", name: "MySQL" },
     { id: "mariadb", name: "MariaDB" },
     { id: "postgresql", name: "PostgreSQL" },
+    { id: "plpgsql", name: "PL/pgSQL" },
   ],
   showRange: true,
   includes: initialIncludes,

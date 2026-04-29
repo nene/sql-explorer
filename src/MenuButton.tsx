@@ -19,6 +19,7 @@ const icons = {
   bigquery,
   sqlite,
   postgresql,
+  plpgsql: postgresql,
 };
 
 const MenuButtonArea = styled.div`
